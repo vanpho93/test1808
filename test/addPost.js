@@ -2,8 +2,9 @@ const assert = require('assert');
 const User = require('../src/User');
 
 describe('Create new post', () => {
+    let user;
     beforeEach('Create user with 1 posts', async () => {
-        const user = new User({ 
+        user = new User({ 
             name: 'Teo',
             posts: [
                 { 
@@ -12,6 +13,7 @@ describe('Create new post', () => {
                 }
             ]
         });
+        console.log(user);
         await user.save();
     });
 
@@ -22,12 +24,12 @@ describe('Create new post', () => {
     });
 
     it('Can add new post for user', async () => {
-        const user = await User.findOne({});
-        user.posts.push({
+        const user1 = await User.findById(user._id);
+        user1.posts.push({
             title: 'AAA',
             content: 'BBB'
         });
-        await user.save();
+        await user1.save();
         const user2 = await User.findOne({});
         assert(user2.posts.length === 2);
         assert(user2.posts[1].title === 'AAA');
